@@ -14,6 +14,14 @@ class PasswordStrengthEvaluator
     strength = number_of_character_types * @password.length
   end
 
+  def friendly_strength(password)
+    strength_verbose = case strength(password)
+                       when 0..10 then 'Unacceptable'
+                       when 11..49 then 'Weak'
+                       else 'Strong'
+                       end
+  end
+
   private
 
     def number_of_character_types
