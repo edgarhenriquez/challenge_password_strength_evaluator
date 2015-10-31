@@ -1,9 +1,16 @@
 require 'rubygems'
 require 'chatterbot/dsl'
+require_relative 'lib/password_strength_evaluator'
 
 class RankMyPasswordBot < Chatterbot::Bot
 
   def initialize
+    @evaluator = PasswordStrengthEvaluator.new
+    @responses = {
+      strong: 'Hey, congratulations! Your password is strong :)',
+      weak: 'Your password is weak :|',
+      unacceptable: 'You should try again! Your password is too weak :('
+    }
   end
 
   def run
