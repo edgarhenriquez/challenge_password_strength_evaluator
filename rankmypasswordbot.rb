@@ -17,7 +17,19 @@ class RankMyPasswordBot < Chatterbot::Bot
     loop do
       bot.replies do |tweet|
         text = tweet.text
-        puts "message received: #{text}"
+        puts "BOT:: message received: #{text}"
+
+        password = text.gsub(/@rankmypassword/, '')
+        friendly_strength = @evaluator.friendly_strength(password)
+        response = case friendly_strength
+                   when /Strong/ then @responses[:strong]
+                   when /Weak/ then @responses[:weak]
+                   else @responses[:unacceptable]
+                   end
+
+        friendly_response = "#USER# #{response}"
+        puts "BOT:: message sent: #{friendly_response}"
+        reply friendly_response, tweet
       end
 
       bot.update_config # To keep track of the last tweet processed
