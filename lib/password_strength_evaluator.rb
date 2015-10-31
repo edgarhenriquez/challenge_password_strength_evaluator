@@ -1,3 +1,5 @@
+require_relative 'utils'
+
 class PasswordStrengthEvaluator
 
   def initialize
@@ -6,6 +8,8 @@ class PasswordStrengthEvaluator
 
   def strength(password)
     @password = password
+
+    replace_english_words
 
     strength = number_of_character_types * @password.length
   end
@@ -35,6 +39,17 @@ class PasswordStrengthEvaluator
 
     def has_other_characters?
       !/[^\A-Za-z\d\s]/.match(@password).nil?
+    end
+
+    def replace_english_words
+      english_words = Utils.find_words(@password)
+
+      english_words.sort! { |x,y| y.length <=> x.length } # Sort by word length from longest to shortest
+
+      english_words.each do |word|
+        replace_character = ('a'..'z').to_a.sample
+        @password.gsub!(/#{word}/, replace_character)
+      end
     end
 
 end
