@@ -7,7 +7,7 @@ class PasswordStrengthEvaluator
   end
 
   def strength(password)
-    @password = password
+    @password = password.clone
 
     replace_english_words
 
