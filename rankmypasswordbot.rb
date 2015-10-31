@@ -21,9 +21,14 @@ class RankMyPasswordBot < Chatterbot::Bot
 
         password = text.gsub(/@rankmypassword/, '')
         friendly_strength = @evaluator.friendly_strength(password)
+
+        if /Weak/.match(friendly_strength)
+          new_password = @evaluator.strengthen(password)
+        end
+
         response = case friendly_strength
                    when /Strong/ then @responses[:strong]
-                   when /Weak/ then @responses[:weak]
+                   when /Weak/ then new_password
                    else @responses[:unacceptable]
                    end
 
